@@ -1,0 +1,92 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ImporTrack Pro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+        }
+
+        /* Estilos de Impresión Profesional para PDF */
+        @media print {
+            @page {
+                size: A4;
+                margin: 1cm;
+            }
+
+            /* Resetear fondos y márgenes */
+            html, body {
+                background-color: white !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+
+            /* Ocultar UI innecesaria */
+            header, footer, .no-print, button, .stats-container, .filters-container, nav {
+                display: none !important;
+                visibility: hidden !important;
+            }
+
+            /* Contenedor principal para impresión */
+            main {
+                margin: 0 !important;
+                padding: 0 !important;
+                max-width: 100% !important;
+                width: 100% !important;
+            }
+
+            /* Lógica de visibilidad de tarjetas */
+            .shipment-card {
+                display: none !important;
+            }
+
+            .shipment-card.printing {
+                display: block !important;
+                position: absolute !important;
+                top: 0 !important;
+                left: 0 !important;
+                width: 100% !important;
+                border: none !important;
+                box-shadow: none !important;
+                padding: 0 !important;
+                margin: 0 !important;
+            }
+
+            /* Asegurar que el timeline no se corte */
+            .milestone-item {
+                page-break-inside: avoid;
+            }
+
+            /* Ajuste de colores para que se vean en el PDF */
+            .bg-blue-600 { background-color: #2563eb !important; }
+            .bg-green-500 { background-color: #22c55e !important; }
+            .bg-amber-500 { background-color: #f59e0b !important; }
+            .bg-red-500 { background-color: #ef4444 !important; }
+            .text-white { color: white !important; }
+        }
+    </style>
+<script type="importmap">
+{
+  "imports": {
+    "react/": "https://esm.sh/react@^19.2.3/",
+    "react": "https://esm.sh/react@^19.2.3",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+    "date-fns": "https://esm.sh/date-fns@^4.1.0"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+<body>
+    <div id="root"></div>
+<script type="module" src="/index.tsx"></script>
+</body>
+</html>
