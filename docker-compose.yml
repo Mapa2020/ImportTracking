@@ -7,49 +7,46 @@ services:
     container_name: importtrack_db
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
-      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_ROOT_PASSWORD: Czuma20
+      MYSQL_DATABASE: import_tracking
+    ports:
+      - "3306:3306"
     volumes:
       - db_data:/var/lib/mysql
-      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
-    networks:
-      - app-network
+    # Comando para asegurar compatibilidad de autenticación con Node.js
+    command: --default-authentication-plugin=mysql_native_password
 
   # Servicio Backend (Node.js)
   backend:
     build: ./backend
     container_name: importtrack_backend
     restart: always
-    depends_on:
-      - db
+    ports:
+      - "3001:3001"
     environment:
       DB_HOST: db
       DB_USER: root
-      DB_PASS: ${DB_PASSWORD}
-      DB_NAME: ${DB_NAME}
+      DB_PASSWORD: Czuma20
+      DB_NAME: import_tracking
+      PORT: 3001
+      # Variables para envío de correos y JWT (definir en .env o aquí)
       JWT_SECRET: ${JWT_SECRET}
-      SMTP_HOST: ${SMTP_HOST}
-      SMTP_PORT: ${SMTP_PORT}
       EMAIL_USER: ${EMAIL_USER}
       EMAIL_PASS: ${EMAIL_PASS}
-    networks:
-      - app-network
+      SMTP_HOST: ${SMTP_HOST}
+      SMTP_PORT: ${SMTP_PORT}
+    depends_on:
+      - db
 
-  # Servicio Frontend (Nginx + React)
+  # Servicio Frontend (React + Serve)
   frontend:
     build: .
     container_name: importtrack_frontend
     restart: always
     ports:
-      - "80:80"
+      - "3000:3000"
     depends_on:
       - backend
-    networks:
-      - app-network
 
 volumes:
   db_data:
-
-networks:
-  app-network:
-    driver: bridge

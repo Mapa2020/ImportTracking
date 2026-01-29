@@ -93,8 +93,8 @@ app.post('/api/auth/forgot-password', async (req, res) => {
     await db.query('UPDATE Usuario SET reset_token = ?, reset_token_expires = ? WHERE email = ?', 
       [token, expires, email]);
 
-    // Enviar email (apuntando al frontend en el puerto 3000)
-    const resetUrl = `http://localhost:3000/?token=${token}`;
+    // Enviar email (apuntando al frontend en producción)
+    const resetUrl = `https://www.gemas.online/?token=${token}`;
     
     const mailOptions = {
       from: process.env.EMAIL_USER,
@@ -273,6 +273,7 @@ app.post('/api/notify/milestone-alert', async (req, res) => {
           <li><strong>Descripción:</strong> ${milestone.description}</li>
           <li><strong>Fecha de Vencimiento:</strong> ${milestone.dueDate}</li>
         </ul>
+        <p>Acceda al sistema aquí: <a href="https://www.gemas.online">www.gemas.online</a></p>
         <p>Por favor, tome las acciones necesarias.</p>
       `
     };
