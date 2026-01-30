@@ -28,20 +28,22 @@ const Auth: React.FC<AuthProps> = ({ onLogin }) => {
     e.preventDefault();
     setMessage(null);
 
+    const API_URL = 'http://localhost:3001';
+
     let url = '';
     let body = {};
 
     if (view === 'login') {
-      url = '/api/auth/login';
+      url = `${API_URL}/api/auth/login`;
       body = { email, password };
     } else if (view === 'register') {
-      url = '/api/auth/register';
+      url = `${API_URL}/api/auth/register`;
       body = { nombre, email, password };
     } else if (view === 'forgot') {
-      url = '/api/auth/forgot-password';
+      url = `${API_URL}/api/auth/forgot-password`;
       body = { email };
     } else if (view === 'reset') {
-      url = '/api/auth/reset-password';
+      url = `${API_URL}/api/auth/reset-password`;
       body = { token: resetToken, newPassword: password };
     }
 

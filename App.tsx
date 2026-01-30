@@ -9,6 +9,8 @@ import { calculateKPIs, getStatus } from './utils/calculations';
 import { sendAlertEmail } from './utils/emailService';
 import Auth from './components/Auth';
 
+const API_URL = 'http://localhost:3001';
+
 const App: React.FC = () => {
   const [user, setUser] = useState<any>(null);
   const [shipments, setShipments] = useState<Shipment[]>([]);
@@ -24,7 +26,7 @@ const App: React.FC = () => {
   // Función para cargar datos desde la API
   const fetchShipments = async () => {
     try {
-      const response = await fetch('/api/shipments');
+      const response = await fetch(`${API_URL}/api/shipments`);
       if (response.ok) {
         const data = await response.json();
         setShipments(data);
@@ -93,7 +95,7 @@ const App: React.FC = () => {
 
   const addShipment = async (shipment: Shipment) => {
     try {
-      const res = await fetch('/api/shipments', {
+      const res = await fetch(`${API_URL}/api/shipments`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(shipment)
@@ -109,7 +111,7 @@ const App: React.FC = () => {
 
   const updateShipment = async (updatedShipment: Shipment) => {
     try {
-      const res = await fetch(`/api/shipments/${updatedShipment.id}`, {
+      const res = await fetch(`${API_URL}/api/shipments/${updatedShipment.id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(updatedShipment)
@@ -135,7 +137,7 @@ const App: React.FC = () => {
     
     if (window.confirm(`¿ESTÁ SEGURO DE ELIMINAR EL TRÁMITE: ${identifier}?\n\nEsta acción es irreversible.`)) {
       try {
-        await fetch(`/api/shipments/${id}`, { method: 'DELETE' });
+        await fetch(`${API_URL}/api/shipments/${id}`, { method: 'DELETE' });
         await fetchShipments();
       } catch (e) {
         console.error("Error eliminando:", e);
@@ -151,7 +153,7 @@ const App: React.FC = () => {
     const newCompletedDate = milestone.completedDate ? null : new Date().toISOString().split('T')[0];
 
     try {
-      await fetch(`/api/shipments/${shipmentId}/milestones/${milestoneId}`, {
+      await fetch(`${API_URL}/api/shipments/${shipmentId}/milestones/${milestoneId}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ completedDate: newCompletedDate })
