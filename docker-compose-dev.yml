@@ -1,0 +1,56 @@
+version: '3.8'
+
+services:
+  # Servicio de Base de Datos
+  db:
+    image: mysql:8.0
+    container_name: importtrack_db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: Czuma20
+      MYSQL_DATABASE: import_tracking
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+    # Comando para asegurar compatibilidad de autenticación con Node.js
+    command: --default-authentication-plugin=mysql_native_password
+
+  # Servicio Backend (Node.js)
+  backend:
+    build: ./backend
+    container_name: importtrack_backend
+    restart: always
+    ports:
+      - "3001:3001"
+    environment:
+      DB_HOST: db
+      DB_USER: root
+      DB_PASSWORD: Czuma20
+      DB_NAME: import_tracking
+      PORT: 3001
+      # Variables para envío de correos y JWT (definir en .env o aquí)
+      JWT_SECRET: ${JWT_SECRET}
+      EMAIL_USER: ${EMAIL_USER}
+      EMAIL_PASS: ${EMAIL_PASS}
+      SMTP_HOST: ${SMTP_HOST}
+      SMTP_PORT: ${SMTP_PORT}
+    depends_on:
+      - db
+
+  # Servicio Frontend (React + Serve)
+  frontend:
+    build: 
+      context: .
+      dockerfile: dockerfile.dev
+    container_name: importtrack_frontend
+    restart: always
+    ports:
+      - "3000:3000"
+    volumes:
+      -/app/node_modules
+    depends_on:
+      - backend
+
+volumes:
+  db_data:
